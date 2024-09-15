@@ -45,5 +45,6 @@ class EmployeeModel(Model):
             database (MySQLDatabase): The database connection to use for this model.
             table_name (str): The name of the table in the database to which this model is mapped.
         """
+        # pylint: disable=too-few-public-methods
         database = database
         table_name = "employees"
