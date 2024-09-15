@@ -7,7 +7,7 @@ Permite obtener, crear, actualizar y eliminar proyectos en la base de datos.
 from fastapi import APIRouter, Body
 
 # Importar el modelo de datos Project de Pydantic
-from FastAPI.app.models.project import Proyect
+from models.project import Project
 
 # Importar el modelo de base de datos ProjectModel
 from database import ProjectModel  
@@ -62,7 +62,7 @@ def get_project(projectId: int):
 
 
 @project_route.post("/")
-def create_project(project: Proyect = Body(...)):
+def create_project(project: Project = Body(...)):
     """
     Crea un nuevo proyecto y lo almacena en la base de datos.
 
@@ -92,7 +92,7 @@ def create_project(project: Proyect = Body(...)):
 
 
 @project_route.put("/{projectId}")
-def update_project(projectId: int, project: Proyect = Body(...)):
+def update_project(projectId: int, project: Project = Body(...)):
     """
     Actualiza un proyecto existente en la base de datos.
 
