@@ -20,7 +20,6 @@ class Employee(BaseModel):
         post (str): The job position or title of the employee.
     """
 
-    id: int
     name: str
     email: str
     phone: str

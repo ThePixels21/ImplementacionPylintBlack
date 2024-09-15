@@ -9,15 +9,14 @@ Routes provided:
 - DELETE /employees/{employee_id}: Delete an employee record by ID.
 """
 
-from fastapi import APIRouter, Body
+from typing import List, Dict
+from fastapi import APIRouter, Body, HTTPException
 from models.employee import Employee
 from database import EmployeeModel
-from peewee import DoesNotExist
-from starlette.exceptions import HTTPException
 
 employee_route = APIRouter()
 
-@employee_route.get("/employees")
+@employee_route.get("/", response_model=List[Employee])
 def get_employees():
     """
     Retrieve a list of all employees.
@@ -28,7 +27,7 @@ def get_employees():
     employees = list(EmployeeModel.select())
     return employees
 
-@employee_route.get("/employees/{employee_id}")
+@employee_route.get("/{employee_id}", response_model=Employee)
 def get_employee(employee_id: int):
     """
     Retrieve a specific employee by their ID.
@@ -45,10 +44,10 @@ def get_employee(employee_id: int):
     try:
         employee = EmployeeModel.get(EmployeeModel.id == employee_id)
         return employee
-    except DoesNotExist as exc:
-        raise HTTPException(404, "Employee not found") from exc
+    except Exception as exc:  # Catching general exception if DoesNotExist is not available
+        raise HTTPException(status_code=404, detail="Employee not found") from exc
 
-@employee_route.post("/employees")
+@employee_route.post("/", response_model=Employee)
 def create_employee(employee: Employee = Body(...)):
     """
     Create a new employee record.
@@ -59,32 +58,41 @@ def create_employee(employee: Employee = Body(...)):
     Returns:
         Employee: The newly created employee record.
     """
-    EmployeeModel.create(
+    created_employee = EmployeeModel.create(
         name=employee.name,
         email=employee.email,
         phone=employee.phone,
         post=employee.post
     )
-    return employee
+    return created_employee
 
-@employee_route.put("/employees/{employee_id}")
-def update_employee(employee_id: int, employee_data: dict):
+@employee_route.put("/{employee_id}", response_model=Employee)
+def update_employee(employee_id: int, employee_data: Dict[str, str]):
     """
     Update an existing employee record by their ID.
 
     Args:
         employee_id (int): The ID of the employee to update.
-        employee_data (dict): The new data for the employee.
+        employee_data (Dict[str, str]): The new data for the employee.
 
     Returns:
-        dict: A message indicating the result of the update operation.
+        Employee: The updated employee record.
 
-    Note:
-        The actual implementation of this method is pending.
+    Raises:
+        HTTPException: 404 error if the employee with the given ID is not found.
     """
-    raise HTTPException(501, "Not implemented")
+    try:
+        employee = EmployeeModel.get(EmployeeModel.id == employee_id)
+        employee.name = employee_data.get("name", employee.name)
+        employee.email = employee_data.get("email", employee.email)
+        employee.phone = employee_data.get("phone", employee.phone)
+        employee.post = employee_data.get("post", employee.post)
+        employee.save()
+        return employee
+    except Exception as exc:  # Catching general exception if DoesNotExist is not available
+        raise HTTPException(status_code=404, detail="Employee not found") from exc
 
-@employee_route.delete("/employees/{employee_id}")
+@employee_route.delete("/{employee_id}")
 def delete_employee(employee_id: int):
     """
     Delete an employee record by their ID.
@@ -101,5 +109,5 @@ def delete_employee(employee_id: int):
     try:
         EmployeeModel.delete().where(EmployeeModel.id == employee_id).execute()
         return {"status": "Employee deleted"}
-    except DoesNotExist as exc:
-        raise HTTPException(404, "Employee not found") from exc
+    except Exception as exc:  # Catching general exception if DoesNotExist is not available
+        raise HTTPException(status_code=404, detail="Employee not found") from exc
