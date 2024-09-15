@@ -3,16 +3,14 @@ Módulo que establece la conexión con una base de datos MySQL usando
 variables de entorno y define un modelo de proyectos utilizando Peewee ORM.
 """
 
-# Importar las librerías necesarias
-from dotenv import load_dotenv
-from peewee import *
 import os
+from dotenv import load_dotenv
+from peewee import Model, CharField, DateField, AutoField, MySQLDatabase
 
 # Cargar las variables de entorno del archivo .env
 load_dotenv()
 
 # Configuración de la base de datos
-# Se obtiene la configuración desde las variables de entorno usando os.getenv()
 database = MySQLDatabase(
     os.getenv("MYSQL_DATABASE"),    # Nombre de la base de datos
     user=os.getenv("MYSQL_USER"),   # Nombre del usuario
@@ -23,7 +21,7 @@ database = MySQLDatabase(
 
 class ProjectModel(Model):
     """
-    Modelo que representa la tabla 'proyects' en la base de datos.
+    Modelo que representa la tabla 'projects' en la base de datos.
 
     Atributos:
     ----------
@@ -38,7 +36,6 @@ class ProjectModel(Model):
     finish_date : DateField
         Campo que almacena la fecha de finalización del proyecto.
     """
-
     id = AutoField(primary_key=True)
     name = CharField(max_length=50)
     description = CharField(max_length=50)
@@ -56,5 +53,6 @@ class ProjectModel(Model):
         table_name : str
             Nombre de la tabla en la base de datos que representa este modelo.
         """
+        # pylint: disable=too-few-public-methods
         database = database
         table_name = "projects"
