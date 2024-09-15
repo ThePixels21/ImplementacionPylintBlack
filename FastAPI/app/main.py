@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 from database import database as connection
 from routes.employee_route import employee_route
+from routes.proyect_route import project_route
 
 @asynccontextmanager
 async def manage_lifespan(_app: FastAPI):
@@ -38,3 +39,4 @@ async def read_root():
     return RedirectResponse(url="/docs")
 
 app.include_router(employee_route, prefix="/api/employees", tags=["Employees"])
+app.include_router(project_route, prefix="/api/projects", tags=["projects"])
