@@ -3,6 +3,9 @@ Módulo principal de la aplicación FastAPI que configura la conexión a la base
 gestiona el ciclo de vida de la aplicación y define las rutas principales.
 """
 
+# Importación del manejador de contexto asíncrono
+from contextlib import asynccontextmanager
+
 # Importación de FastAPI y RedirectResponse para gestionar las redirecciones
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
@@ -11,12 +14,9 @@ from starlette.responses import RedirectResponse
 from database import database as connection
 from routes.project_route import project_route
 
-# Importación del manejador de contexto asíncrono
-from contextlib import asynccontextmanager
-
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     """
     Gestor de ciclo de vida para la aplicación FastAPI que maneja la conexión
     a la base de datos al iniciar y finalizar la aplicación.
@@ -34,7 +34,6 @@ async def lifespan(app: FastAPI):
     # Conectar a la base de datos si la conexión está cerrada
     if connection.is_closed():
         connection.connect()
-    
     try:
         yield  # Aquí se ejecuta la aplicación dentro del ciclo de vida
     finally:
@@ -55,7 +54,7 @@ def read_root():
     Retorna:
     --------
     RedirectResponse:
-        Una respuesta que redirige a "/docs", que es la interfaz de documentación automática de FastAPI.
+        Una respuesta que redirige a "/docs", que es la interfaz de documentación de FastAPI.
     """
     return RedirectResponse(url="/docs")
 

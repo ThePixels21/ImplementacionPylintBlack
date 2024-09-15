@@ -4,11 +4,11 @@ representa una tarea que tiene un proyecto asociado, un empleado asignado,
 título, descripción, fecha límite y estado.
 """
 
-# Importar BaseModel de Pydantic para crear el modelo de datos
-from pydantic import BaseModel
-
 # Importar la clase date para manejar fechas
 from datetime import date
+
+# Importar BaseModel de Pydantic para crear el modelo de datos
+from pydantic import BaseModel
 
 
 class Task(BaseModel):
@@ -30,7 +30,6 @@ class Task(BaseModel):
     status : bool, opcional
         Estado de la tarea, por defecto es `False` (pendiente).
     """
-    
     proyect_id: int
     employee_id: int
     tittle: str
