@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 from database import database as connection
 from routes.employee_route import employee_route
-from routes.proyect_route import project_route
+from routes.project_route import project_route
 
 @asynccontextmanager
 async def manage_lifespan(_app: FastAPI):

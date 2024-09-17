@@ -1,40 +1,38 @@
 """
-Módulo que define el modelo de datos `Task` utilizando Pydantic. Este modelo
-representa una tarea que tiene un proyecto asociado, un empleado asignado,
-título, descripción, fecha límite y estado.
+Module that defines the `Task` data model using Pydantic. This model
+represents a task that has an associated project, an assigned employee,
+title, description, deadline, and status.
 """
 
-# Importar la clase date para manejar fechas
+# Import the date class to handle dates
 from datetime import date
 
-# Importar BaseModel de Pydantic para crear el modelo de datos
+# Import BaseModel from Pydantic to create the data model
 from pydantic import BaseModel
 
 
 class Task(BaseModel):
     """
-    Modelo de datos `Task` que valida la información de una tarea.
+    `Task` data model that validates task information.
 
-    Atributos:
+    Attributes:
     ----------
-    proyect_id : int
-        Identificador del proyecto al que está asociada la tarea.
+    project_id : int
+        Identifier of the project associated with the task.
     employee_id : int
-        Identificador del empleado asignado a la tarea.
-    tittle : str
-        Título de la tarea.
+        Identifier of the employee assigned to the task.
+    title : str
+        Title of the task.
     description : str
-        Descripción detallada de la tarea.
+        Detailed description of the task.
     limit_date : date
-        Fecha límite para completar la tarea.
-    status : bool, opcional
-        Estado de la tarea, por defecto es `False` (pendiente).
+        Deadline for completing the task.
+    status : bool, optional
+        Status of the task, default is `False` (pending).
     """
-    proyect_id: int
+    project_id: int
     employee_id: int
-    tittle: str
+    title: str
     description: str
     limit_date: date
-    status: bool = False  # Estado por defecto es `False` (tarea pendiente)
-
-    
+    status: bool = False  # Default status is `False` (pending task)

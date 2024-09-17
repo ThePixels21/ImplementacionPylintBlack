@@ -51,20 +51,20 @@ class EmployeeModel(Model):
 
 class ProjectModel(Model):
     """
-    Modelo que representa la tabla 'projects' en la base de datos.
+    Model that represents the 'projects' table in the database.
 
-    Atributos:
+    Attributes:
     ----------
     id : AutoField
-        Campo autoincremental que sirve como identificador único del proyecto.
+        Auto-incremental field that serves as the unique identifier of the project.
     name : CharField
-        Campo de tipo cadena que almacena el nombre del proyecto (máx. 50 caracteres).
+        String field that stores the name of the project (max. 50 characters).
     description : CharField
-        Campo de tipo cadena que almacena una descripción del proyecto (máx. 50 caracteres).
+        String field that stores a description of the project (max. 50 characters).
     init_date : DateField
-        Campo que almacena la fecha de inicio del proyecto.
+        Field that stores the start date of the project.
     finish_date : DateField
-        Campo que almacena la fecha de finalización del proyecto.
+        Field that stores the end date of the project.
     """
     id = AutoField(primary_key=True)
     name = CharField(max_length=50)
@@ -74,14 +74,14 @@ class ProjectModel(Model):
 
     class Meta:
         """
-        Clase Meta que define la configuración adicional del modelo.
+        Meta class that defines the additional configuration of the model.
 
-        Atributos:
+        Attributes:
         ----------
         database : MySQLDatabase
-            La base de datos a la que está vinculado el modelo.
+            The database to which the model is linked.
         table_name : str
-            Nombre de la tabla en la base de datos que representa este modelo.
+            Name of the table in the database that represents this model.
         """
         # pylint: disable=too-few-public-methods
         database = database
