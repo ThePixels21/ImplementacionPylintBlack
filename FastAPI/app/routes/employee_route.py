@@ -16,7 +16,7 @@ from database import EmployeeModel
 
 employee_route = APIRouter()
 
-@employee_route.get("/", response_model=List[Employee])
+@employee_route.get("/")
 def get_employees():
     """
     Retrieve a list of all employees.
@@ -27,7 +27,7 @@ def get_employees():
     employees = list(EmployeeModel.select())
     return employees
 
-@employee_route.get("/{employee_id}", response_model=Employee)
+@employee_route.get("/{employee_id}")
 def get_employee(employee_id: int):
     """
     Retrieve a specific employee by their ID.
@@ -47,7 +47,7 @@ def get_employee(employee_id: int):
     except Exception as exc:  # Catching general exception if DoesNotExist is not available
         raise HTTPException(status_code=404, detail="Employee not found") from exc
 
-@employee_route.post("/", response_model=Employee)
+@employee_route.post("/")
 def create_employee(employee: Employee = Body(...)):
     """
     Create a new employee record.
@@ -66,7 +66,7 @@ def create_employee(employee: Employee = Body(...)):
     )
     return created_employee
 
-@employee_route.put("/{employee_id}", response_model=Employee)
+@employee_route.put("/{employee_id}")
 def update_employee(employee_id: int, employee_data: Dict[str, str]):
     """
     Update an existing employee record by their ID.
