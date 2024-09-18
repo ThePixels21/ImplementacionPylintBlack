@@ -9,7 +9,7 @@ Routes provided:
 - DELETE /employees/{employee_id}: Delete an employee record by ID.
 """
 
-from typing import List, Dict
+from typing import Dict
 from fastapi import APIRouter, Body, HTTPException
 from models.employee import Employee
 from database import EmployeeModel
