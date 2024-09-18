@@ -41,5 +41,4 @@ async def read_root():
 
 app.include_router(employee_route, prefix="/employees", tags=["Employees"])
 app.include_router(project_route, prefix="/projects", tags=["Projects"])
-
 app.include_router(task_route, prefix="/tasks", tags=["Tasks"])
