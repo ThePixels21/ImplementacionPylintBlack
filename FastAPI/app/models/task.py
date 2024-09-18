@@ -34,5 +34,5 @@ class Task(BaseModel):
     employee_id: int
     title: str
     description: str
-    limit_date: date
+    deadline: date
     status: bool = False  # Default status is `False` (pending task)

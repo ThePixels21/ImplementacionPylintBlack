@@ -5,7 +5,7 @@ the Peewee model for interacting with the 'employees' table.
 
 import os
 from dotenv import load_dotenv
-from peewee import Model, MySQLDatabase, DateField,AutoField, CharField
+from peewee import Model, MySQLDatabase, DateField, AutoField, CharField, ForeignKeyField
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -86,3 +86,47 @@ class ProjectModel(Model):
         # pylint: disable=too-few-public-methods
         database = database
         table_name = "projects"
+
+class TaskModel(Model):
+    """
+    Model that represents the 'tasks' table in the database.
+
+    Attributes:
+    ----------
+    id : AutoField
+        Auto-incremental field that serves as the unique identifier of the task.
+    project_id : ForeignKeyField
+        Foreign key that links the task to a project.
+    employee_id : ForeignKeyField
+        Foreign key that links the task to an employee.
+    title : CharField
+        String field that stores the title of the task (max. 50 characters).
+    description : TextField
+        Text field that stores a detailed description of the task.
+    deadline : DateField
+        Field that stores the deadline date of the task.
+    status : CharField
+        String field that stores the current status of the task (max. 20 characters).
+    """
+    id = AutoField(primary_key=True)
+    project_id = ForeignKeyField(ProjectModel, backref='tasks', on_delete='CASCADE')
+    employee_id = ForeignKeyField(EmployeeModel, backref='tasks', on_delete='CASCADE')
+    title = CharField(max_length=50)
+    description = CharField(max_length=500)
+    deadline = DateField()
+    status = CharField(max_length=20)
+
+    class Meta:
+        """
+        Meta class that defines the additional configuration of the model.
+
+        Attributes:
+        ----------
+        database : MySQLDatabase
+            The database to which the model is linked.
+        table_name : str
+            Name of the table in the database that represents this model.
+        """
+        # pylint: disable=too-few-public-methods
+        database = database
+        table_name = "tasks"
