@@ -49,6 +49,15 @@ async def read_root():
     """
     return RedirectResponse(url="/docs")
 
-app.include_router(employee_route, prefix="/employees", tags=["Employees"], dependencies=[Depends(get_api_key)])
-app.include_router(project_route, prefix="/projects", tags=["Projects"], dependencies=[Depends(get_api_key)])
-app.include_router(task_route, prefix="/tasks", tags=["Tasks"], dependencies=[Depends(get_api_key)])
+app.include_router(employee_route,
+                   prefix="/employees",
+                   tags=["Employees"],
+                   dependencies=[Depends(get_api_key)])
+app.include_router(project_route,
+                   prefix="/projects",
+                   tags=["Projects"],
+                   dependencies=[Depends(get_api_key)])
+app.include_router(task_route,
+                   prefix="/tasks",
+                   tags=["Tasks"],
+                   dependencies=[Depends(get_api_key)])
