@@ -13,7 +13,6 @@ class Employee(BaseModel):
     A Pydantic model representing an employee.
 
     Attributes:
-        id (int): The unique identifier of the employee.
         name (str): The name of the employee.
         email (str): The email address of the employee.
         phone (str): The phone number of the employee.

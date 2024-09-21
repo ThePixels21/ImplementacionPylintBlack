@@ -2,3 +2,5 @@
 .vscode/
 venv/
 MySQL/volumes/
+.env
+__pychache__/

@@ -1,7 +1,7 @@
 """
-Module that defines the `Task` data model using Pydantic. This model
+Module that defines the Task data model using Pydantic. This model
 represents a task that has an associated project, an assigned employee,
-title, description, deadline, and status.
+a title, description, deadline, and status.
 """
 
 # Import the date class to handle dates
@@ -13,7 +13,7 @@ from pydantic import BaseModel
 
 class Task(BaseModel):
     """
-    `Task` data model that validates task information.
+    Task data model that validates task information.
 
     Attributes:
     ----------
@@ -25,14 +25,14 @@ class Task(BaseModel):
         Title of the task.
     description : str
         Detailed description of the task.
-    limit_date : date
+    deadline : date
         Deadline for completing the task.
     status : bool, optional
-        Status of the task, default is `False` (pending).
+        Status of the task, default is False (pending).
     """
     project_id: int
     employee_id: int
     title: str
     description: str
     deadline: date
-    status: bool = False  # Default status is `False` (pending task)
+    status: bool = False  # Default status is False (pending task)

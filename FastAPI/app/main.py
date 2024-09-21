@@ -6,7 +6,8 @@ lifecycle, and includes routes.
 """
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from helpers.api_key_auth import get_api_key
 from starlette.responses import RedirectResponse
 from database import database as connection
 from routes.employee_route import employee_route
@@ -28,7 +29,16 @@ async def manage_lifespan(_app: FastAPI):
         if not connection.is_closed():
             connection.close()
 
-app = FastAPI(lifespan=manage_lifespan)
+app = FastAPI(
+    title="Microservicio de usuarios",
+    version="2.0",
+    contact={
+        "name": "SANTIAGO QUINTERO RINCÓN",
+        "url": "https://github.com/ThePixels21",
+        "email": "santiqrdev@gmail.com",
+    },
+    lifespan=manage_lifespan
+)
 
 @app.get("/")
 async def read_root():
@@ -39,6 +49,6 @@ async def read_root():
     """
     return RedirectResponse(url="/docs")
 
-app.include_router(employee_route, prefix="/employees", tags=["Employees"])
-app.include_router(project_route, prefix="/projects", tags=["Projects"])
-app.include_router(task_route, prefix="/tasks", tags=["Tasks"])
+app.include_router(employee_route, prefix="/employees", tags=["Employees"], dependencies=[Depends(get_api_key)])
+app.include_router(project_route, prefix="/projects", tags=["Projects"], dependencies=[Depends(get_api_key)])
+app.include_router(task_route, prefix="/tasks", tags=["Tasks"], dependencies=[Depends(get_api_key)])
