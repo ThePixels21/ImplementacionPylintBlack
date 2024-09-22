@@ -148,7 +148,7 @@ class ProjectService:
             e_project.save()  # Save changes
             return "Project updated successfully"
         except Exception as exc:  
-            raise HTTPException(status_code=404, detail="Project not found") from exc
+            raise HTTPException(status_code=404, detail="Project don't exit") from exc
 
     @staticmethod
     def delete_project(project_id: int):
