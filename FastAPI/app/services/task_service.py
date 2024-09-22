@@ -104,7 +104,7 @@ class TaskService:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         except IntegrityError as exc:
             raise HTTPException(
-            status_code=500, detail="An error occurred while creating the project"
+            status_code=500, detail="An error occurred while creating the task"
         ) from exc
 
     @staticmethod

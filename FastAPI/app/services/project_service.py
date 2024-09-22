@@ -138,7 +138,6 @@ class ProjectService:
             In case of error, returns a dictionary with the error message.
         """
         try:
-            # pylint: disable=R0801
             e_project = ProjectModel.get(ProjectModel.id == project_id)  # Get existing project
 
             e_project.name = project.name
