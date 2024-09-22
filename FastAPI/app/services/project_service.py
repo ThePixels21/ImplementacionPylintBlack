@@ -138,6 +138,7 @@ class ProjectService:
             In case of error, returns a dictionary with the error message.
         """
         try:
+            # pylint: disable=R0801
             e_project = ProjectModel.get(ProjectModel.id == project_id)  # Get existing project
 
             e_project.name = project.name
@@ -147,8 +148,8 @@ class ProjectService:
 
             e_project.save()  # Save changes
             return "Project updated successfully"
-        except Exception as exc:  
-            raise HTTPException(status_code=404, detail="Project don't exit") from exc
+        except DoesNotExist as exc:  
+            raise HTTPException(status_code=404, detail="Project not exists") from exc
 
     @staticmethod
     def delete_project(project_id: int):
