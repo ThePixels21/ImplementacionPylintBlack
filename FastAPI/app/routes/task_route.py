@@ -4,13 +4,12 @@ It allows fetching, creating, updating, and deleting tasks in the database.
 """
 
 # Import APIRouter from FastAPI to create routes
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, Body
 
 # Import the Task data model from Pydantic
 from models.task import Task
 
-# Import the TaskModel database model
-from database import TaskModel
+from services.task_service import TaskService
 
 # Create an instance of APIRouter for task routes
 task_route = APIRouter()
@@ -27,8 +26,7 @@ def get_all_tasks():
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    tasks = list(TaskModel.select())  # Select all tasks
-    return tasks
+    return TaskService.get_all_tasks()
 
 @task_route.get("/{task_id}")
 def get_task(task_id: int):
@@ -47,11 +45,7 @@ def get_task(task_id: int):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    try:
-        task = TaskModel.get(TaskModel.id == task_id)  # Get task by ID
-        return task
-    except Exception as exc:
-        raise HTTPException(status_code=404, detail="Task not found") from exc
+    return TaskService.get_task(task_id)
 
 @task_route.post("/")
 def create_task(task: Task = Body(...)):
@@ -70,15 +64,7 @@ def create_task(task: Task = Body(...)):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    TaskModel.create(
-        project_id=task.project_id,
-        employee_id=task.employee_id,
-        title=task.title,
-        description=task.description,
-        deadline=task.deadline,
-        status=task.status
-    )
-    return task
+    return TaskService.create_task(task)
 
 @task_route.put("/{task_id}")
 def update_task(task_id: int, task: Task = Body(...)):
@@ -99,20 +85,7 @@ def update_task(task_id: int, task: Task = Body(...)):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    try:
-        e_task = TaskModel.get(TaskModel.id == task_id)  # Get existing task
-
-        e_task.project_id = task.project_id
-        e_task.employee_id = task.employee_id
-        e_task.title = task.title
-        e_task.description = task.description
-        e_task.deadline = task.deadline
-        e_task.status = task.status
-
-        e_task.save()  # Save changes
-        return "Task updated successfully"
-    except Exception as exc:  # Catching general exception if DoesNotExist is not available
-        raise HTTPException(status_code=404, detail="Task not found") from exc
+    return TaskService.update_task(task_id,task)
 
 @task_route.delete("/{task_id}")
 def delete_task(task_id: int):
@@ -131,10 +104,4 @@ def delete_task(task_id: int):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    try:
-        task = TaskModel.get(TaskModel.id == task_id)  # Get task by ID
-
-        task.delete_instance()  # Delete task
-        return "Task deleted successfully"
-    except Exception as exc:  # Catching general exception if DoesNotExist is not available
-        raise HTTPException(status_code=404, detail="Task not found") from exc
+    return TaskService.delete_task(task_id)

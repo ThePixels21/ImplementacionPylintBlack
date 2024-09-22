@@ -4,13 +4,12 @@ It allows fetching, creating, updating, and deleting projects in the database.
 """
 
 # Import APIRouter from FastAPI to create routes
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, Body
 
 # Import the Project data model from Pydantic
 from models.project import Project
 
-# Import the ProjectModel database model
-from database import ProjectModel
+from services.project_service import ProjectService
 
 # Create an instance of APIRouter for project routes
 project_route = APIRouter()
@@ -27,8 +26,7 @@ def get_all_projects():
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    projects = list(ProjectModel.select())  # Select all projects
-    return projects
+    return ProjectService.get_all_projects()
 
 @project_route.get("/{project_id}")
 def get_project(project_id: int):
@@ -47,11 +45,7 @@ def get_project(project_id: int):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    try:
-        project = ProjectModel.get(ProjectModel.id == project_id)  # Get project by ID
-        return project
-    except Exception as exc:
-        raise HTTPException(status_code=404, detail="Project not found") from exc
+    return ProjectService.get_project(project_id)
 
 @project_route.post("/")
 def create_project(project: Project = Body(...)):
@@ -70,13 +64,7 @@ def create_project(project: Project = Body(...)):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    ProjectModel.create(
-        name=project.name,
-        description=project.description,
-        init_date=project.init_date,
-        finish_date=project.finish_date
-    )
-    return project
+    return ProjectService.create_project(project)
 
 @project_route.put("/{project_id}")
 def update_project(project_id: int, project: Project = Body(...)):
@@ -97,18 +85,7 @@ def update_project(project_id: int, project: Project = Body(...)):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    try:
-        e_project = ProjectModel.get(ProjectModel.id == project_id)  # Get existing project
-
-        e_project.name = project.name
-        e_project.description = project.description
-        e_project.init_date = project.init_date
-        e_project.finish_date = project.finish_date
-
-        e_project.save()  # Save changes
-        return "Project updated successfully"
-    except Exception as exc:  # Catching general exception if DoesNotExist is not available
-        raise HTTPException(status_code=404, detail="Project not found") from exc
+    return ProjectService.update_project(project_id,project)
 
 @project_route.delete("/{project_id}")
 def delete_project(project_id: int):
@@ -127,10 +104,4 @@ def delete_project(project_id: int):
     dict:
         In case of error, returns a dictionary with the error message.
     """
-    try:
-        project = ProjectModel.get(ProjectModel.id == project_id)  # Get project by ID
-
-        project.delete_instance()  # Delete project
-        return "Project deleted successfully"
-    except Exception as exc:  # Catching general exception if DoesNotExist is not available
-        raise HTTPException(status_code=404, detail="Project not found") from exc
+    return ProjectService.delete_project(project_id)
